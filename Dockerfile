@@ -2,8 +2,10 @@ ARG KUBERNETES_VERSION=dev
 
 # Build environment
 FROM rancher/hardened-build-base:v1.20.13b2 AS build
+
 ARG DAPPER_HOST_ARCH
 ENV ARCH $DAPPER_HOST_ARCH
+
 RUN set -x && \
     apk --no-cache add \
     bash \
@@ -25,8 +27,8 @@ RUN if [ "${ARCH}" = "amd64" ]; then \
     	apk --no-cache add mingw-w64-gcc; \
     fi
 
-FROM registry.suse.com/bci/bci-base AS rpm-macros
-RUN zypper install -y systemd-rpm-macros
+# FROM registry.suse.com/bci/bci-base AS rpm-macros
+# RUN zypper install -y systemd-rpm-macros
 
 # Dapper/Drone/CI environment
 FROM build AS dapper
@@ -75,7 +77,7 @@ RUN GOCR_VERSION="v0.5.1" && \
 
 WORKDIR /source
 
-COPY --from=rpm-macros /usr/lib/rpm/macros.d/macros.systemd /usr/lib/rpm/macros.d
+# COPY --from=rpm-macros /usr/lib/rpm/macros.d/macros.systemd /usr/lib/rpm/macros.d
 # End Dapper stuff
 
 # Shell used for debugging

@@ -33,4 +33,4 @@ fi
 mkdir -p build/images
 docker image save \
     --output build/images/${PROG}-runtime.tar \
-    ${REPO}/${PROG}-runtime:${DOCKERIZED_VERSION}-${GOOS}-${GOARCH}
+    ${REPO}/${PROG}-runtime:${DOCKERIZED_VERSION}

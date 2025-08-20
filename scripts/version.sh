@@ -27,7 +27,7 @@ fi
 GIT_TAG=$DRONE_TAG
 TREE_STATE=clean
 COMMIT=$DRONE_COMMIT
-REVISION=$(git rev-parse HEAD)$(if ! git diff --no-ext-diff --quiet --exit-code; then echo .dirty; fi)
+REVISION=$(git rev-parse HEAD)
 PLATFORM=${GOOS}-${GOARCH}
 RELEASE=${PROG}.${PLATFORM}
 # hardcode versions unless set specifically
@@ -41,10 +41,6 @@ if [ -d .git ]; then
     if [ -z "$GIT_TAG" ]; then
         GIT_TAG=$(git tag -l --contains HEAD | head -n 1)
     fi
-    if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
-        DIRTY="-dirty"
-        TREE_STATE=dirty
-    fi
 
     COMMIT=$(git log -n3 --pretty=format:"%H %ae" | grep -v ' drone@localhost$' | cut -f1 -d\  | head -1)
     if [ -z "${COMMIT}" ]; then
@@ -52,10 +48,13 @@ if [ -d .git ]; then
     fi
 fi
 
+VERSION="v1.27.10+rke2r1"
+GIT_TAG=$VERSION
+
 if [[ -n "$GIT_TAG" ]]; then
     VERSION=$GIT_TAG
 else
-    VERSION="${KUBERNETES_VERSION}+dev.${COMMIT:0:8}$DIRTY"
+    VERSION="${KUBERNETES_VERSION}+dev.${COMMIT:0:8}"
 fi
 
 if [[ "${VERSION}" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)([-+][a-zA-Z0-9.]+)?[-+]((rke2r[0-9]+|dev.*))$ ]]; then

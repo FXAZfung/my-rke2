@@ -5,6 +5,9 @@ cd $(dirname $0)/..
 
 source ./scripts/version.sh
 
+go env -w GOPROXY=https://goproxy.cn,direct
+go env -w GOSUMDB=sum.golang.google.cn
+
 if [ -z "${GODEBUG}" ]; then
     EXTRA_LDFLAGS="${EXTRA_LDFLAGS} -w"
     DEBUG_GO_GCFLAGS=""
@@ -45,6 +48,9 @@ GO_LDFLAGS="${STATIC_FLAGS} ${EXTRA_LDFLAGS}"
 echo ${DEBUG_GO_GCFLAGS}
 
 # passing boringcrypto to GOEXPERIMENT variable to build with goboring library
+
+go mod tidy
+
 GOEXPERIMENT=boringcrypto go build \
     -tags "${GO_BUILDTAGS}" \
     ${GO_GCFLAGS} ${GO_BUILD_FLAGS} \

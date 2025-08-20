@@ -2,6 +2,11 @@ module github.com/rancher/rke2
 
 go 1.19
 
+replace ( 
+    github.com/rancher/dynamiclistener => github.com/FXAZfung/my-dynamiclistener v0.0.0-20250723082758-5038c4537235
+    github.com/k3s-io/k3s => github.com/FXAZfung/k3s v1.27.10-fxaz
+)
+
 replace (
 	github.com/Microsoft/hcsshim => github.com/Microsoft/hcsshim v0.11.0
 	github.com/Mirantis/cri-dockerd => github.com/k3s-io/cri-dockerd v0.3.4-k3s1
